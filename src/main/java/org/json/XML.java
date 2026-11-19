@@ -489,7 +489,11 @@ public class XML {
         char initial = string.charAt(0);
         if ((initial >= '0' && initial <= '9') || initial == '-') {
             try {
-                return stringToNumber(string);
+                // numbers longer than 1000 chars are kept as strings to avoid
+                // the super-linear cost of BigInteger/BigDecimal parsing
+                if (string.length() <= 1000) {
+                    return stringToNumber(string);
+                }
             } catch (Exception ignore) {
             }
         }
